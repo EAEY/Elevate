@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Freelancers | Elevate</title>
+    <meta name="description" content="Find, filter, and hire certified freelancers from the Elevate platform. Trusted professionals ready to bring your project to life.">
+    
+    <style>
+        /* =================================
+           1. GLOBAL DESIGN SYSTEM & RESET
+        ==================================== */
+        :root {
+            --primary-bg: #11103C;
+            --accent-light-rose: #C6A5AD;
+            --accent-deep-violet: #524A75;
+            --accent-earthy-purple: #5B495A;
+            --accent-cool-gray-violet: #79779E;
+            --text-body: #6c757d; /* Softened text color */
+            --text-headings: #FFFFFF;
+            --white: #FFFFFF;
+            --section-bg-light: #F8F9FA;
+            --border-color: #dee2e6;
+            --status-available: #28a745;
+            --status-busy: #dc3545;
+            --star-color: #ffc107;
+        }
+
+        /* Using a more modern font stack */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: inherit; font-weight: 700;}
+        html[dir="rtl"] body, html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: 'Tahoma', 'Helvetica', 'Arial', sans-serif; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { background-color: var(--white); color: var(--text-body); line-height: 1.6; }
+        .container { width: 90%; max-width: 1320px; margin: 0 auto; }
+        a, button { transition: all 0.2s ease-in-out; }
+        a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent-light-rose); outline-offset: 2px; border-radius: 4px; }
+        
+        /* Shared Header/Footer/Button styles */
+        .main-header { position: sticky; top: 0; width: 100%; padding: 1rem 0; background-color: rgba(17, 16, 60, 0.98); backdrop-filter: blur(12px); z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-placeholder { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); text-decoration: none; }
+        .main-nav ul { display: flex; list-style: none; } .main-nav li { margin: 0 15px; }
+        .main-nav a { color: var(--text-light); text-decoration: none; font-size: 1rem; padding: 5px 0; border-bottom: 2px solid transparent; }
+        .main-nav a:hover, .main-nav a.active { color: var(--white); border-bottom-color: var(--accent-light-rose); }
+        .lang-toggle-btn { background-color: var(--accent-deep-violet); color: var(--text-light); border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; }
+        html[dir="rtl"] .header-nav-container { flex-direction: row-reverse; }
+
+        .btn { display: inline-block; text-align: center; text-decoration:none; background-color: var(--accent-deep-violet); color: white; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; }
+        .btn-cta { background-color: var(--accent-light-rose); color: var(--primary-bg); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* =================================
+           3. PROFESSIONAL FREELANCER PAGE STYLES
+        ==================================== */
+        .page-header-section {
+            background-color: var(--section-bg-light);
+            padding: 2.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .page-header-content { display: flex; flex-direction: column; gap: 1.5rem; }
+        .page-header-title { color: var(--primary-bg); font-size: 2.5rem; margin: 0;}
+        .search-and-filters { display: flex; gap: 1rem; align-items: center; }
+        .search-box { display: flex; align-items: center; flex-grow: 1; position: relative; }
+        .search-box svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-body); }
+        html[dir="rtl"] .search-box svg { left: auto; right: 15px; }
+        #search-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+        html[dir="rtl"] #search-input { padding: 0.75rem 2.5rem 0.75rem 1rem; }
+
+        .freelancers-page-layout { display: flex; gap: 2.5rem; padding: 2.5rem 0; }
+        html[dir="rtl"] .freelancers-page-layout { flex-direction: row-reverse; }
+        
+        .filters-sidebar { flex: 0 0 260px; height: fit-content; }
+        .filter-group { margin-bottom: 2rem; }
+        .filter-group h4 { font-size: 1.1rem; color: var(--primary-bg); margin-bottom: 1rem; }
+        .filter-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .filter-pill { background-color: #f1f3f5; border: 1px solid transparent; color: #495057; padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.9rem; cursor: pointer; }
+        .filter-pill.active { background-color: var(--accent-deep-violet); color: white; border-color: var(--accent-deep-violet); }
+        
+        #freelancers-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        
+        .freelancer-card {
+            display: none; /* Controlled by JS for filtering */
+            background-color: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .freelancer-card.visible { display: flex; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .freelancer-card:hover { transform: translateY(-6px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+
+        .card-top { display: flex; align-items: flex-start; padding: 1.5rem; gap: 1rem; position: relative; }
+        .card-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--white); box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .card-info { flex-grow: 1; }
+        .card-info h3 { font-size: 1.4rem; color: var(--primary-bg); margin-bottom: 0.1rem; }
+        .card-info .title { color: var(--accent-deep-violet); font-weight: 500; font-size: 1rem; }
+
+        .favorite-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; cursor: pointer; }
+        .favorite-btn svg { width: 24px; height: 24px; stroke: #adb5bd; fill: none; transition: all 0.2s; }
+        .favorite-btn:hover svg { stroke: var(--star-color); }
+        .favorite-btn.is-favorite svg { fill: var(--star-color); stroke: var(--star-color); }
+        html[dir="rtl"] .favorite-btn { right: auto; left: 1rem; }
+
+        .card-middle { padding: 0 1.5rem 1.5rem; }
+        .card-middle .bio { font-size: 0.95rem; margin-bottom: 1.2rem; }
+        .skills-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skill-badge { background-color: #eef2f9; color: #495057; padding: 0.25rem 0.75rem; border-radius: 5px; font-size: 0.8rem; font-weight: 500; }
+
+        .card-bottom { border-top: 1px solid var(--border-color); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: #fafbfc; }
+        .rating svg { color: var(--star-color); width: 18px; }
+        .rating span { font-weight: 600; color: var(--primary-bg); margin-left: 0.25rem;}
+        html[dir="rtl"] .rating span { margin-left: 0; margin-right: 0.25rem; }
+        
+        .status-indicator { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; }
+        .status-indicator::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+        .status-indicator.available::before { background-color: var(--status-available); box-shadow: 0 0 5px var(--status-available); }
+        .status-indicator.busy::before { background-color: var(--status-busy); }
+
+        .no-results { display: none; text-align: center; width: 100%; padding: 3rem 0; font-size: 1.5rem; }
+        #freelancers-grid:has(.no-results-message) { display: block; } /* Show message container when it exists */
+        .no-results-message { display: block; }
+        
+        #mobile-filter-toggle { display: none; }
+        
+        @media (max-width: 992px) {
+            .freelancers-page-layout { flex-direction: column; }
+            .filters-sidebar { position: fixed; top: 0; left: -100%; width: 300px; height: 100%; background: var(--white); z-index: 1001; transition: left 0.3s ease; padding-top: 5rem; box-shadow: 5px 0 15px rgba(0,0,0,0.1); overflow-y: auto; }
+            html[dir="rtl"] .filters-sidebar { left: auto; right: -100%; transition: right 0.3s ease; }
+            .filters-sidebar.is-open { left: 0; }
+            html[dir="rtl"] .filters-sidebar.is-open { right: 0; }
+            .filter-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; }
+            .filter-overlay.is-open { display: block; }
+            .filters-sidebar .close-btn { position: absolute; top: 1.5rem; right: 1.5rem; background:none; border:none; font-size:1.5rem; cursor: pointer;}
+            #mobile-filter-toggle { display: flex; }
+            .search-and-filters { flex-wrap: wrap; }
+        }
+         /* =================================
+           9. FOOTER
+        ==================================== */
+        .main-footer {
+             background-color: var(--primary-bg);
+             color: var(--text-light);
+             padding: 60px 0 20px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--accent-deep-violet);
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section ul {
+             list-style: none;
+        }
+
+        .footer-section li a {
+            color: var(--text-body);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section li a:hover {
+            color: var(--accent-light-rose);
+        }
+        
+        .social-media-icons a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        
+        .social-media-icons .icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-body);
+            transition: color 0.3s;
+        }
+        
+        .social-media-icons a:hover .icon {
+            color: var(--accent-light-rose);
+        }
+        
+        html[dir="ltr"] .social-media-icons a:first-child { margin-left: 0; }
+        html[dir="rtl"] .social-media-icons a:first-child { margin-right: 0; }
+
+
+        .copyright-bar {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--accent-deep-violet);
+            font-size: 0.9rem;
+            color: var(--text-body);
+        }
+        
+    </style>
+</head>
+<body class="lang-mode-en">
+
+    <header class="main-header">
+        <div class="header-nav-container container">
+            <a href="index.html" class="logo-placeholder">Elevate</a>
+            <nav class="main-nav">
+                <ul>
+                    <ul>
+                    <li><a href="./index.html" ><span class="lang-en">Home</span><span class="lang-ar">الرئيسية</span></a></li>
+                    <li><a href="./discover.html"><span class="lang-en">Discover</span><span class="lang-ar">اكتشف</span></a></li>
+                    <li><a href="./Learning.html"><span class="lang-en">Learn</span><span class="lang-ar">تعلم</span></a></li>
+                    <li><a href="./Freelancers.html" class="active"><span class="lang-en">Freelancers</span><span class="lang-ar">المستقلون</span></a></li>
+                    <li><a href="./Hire.html"><span class="lang-en">Hire</span><span class="lang-ar">وظّف</span></a></li>
+                    <li><a href="./Contact.html"><span class="lang-en">Contact</span><span class="lang-ar">اتصل بنا</span></a></li>
+                </ul>
+                </ul>
+            </nav>
+            <button id="langToggle" class="lang-toggle-btn" aria-label="Toggle Language">EN | AR</button>
+        </div>
+    </header>
+    
+    <div class="filter-overlay"></div>
+    
+    <main>
+        <section class="page-header-section">
+            <div class="container page-header-content">
+                <h1 class="page-header-title">
+                    <span class="lang-en">Find Your Next Expert</span>
+                    <span class="lang-ar">اعثر على خبيرك التالي</span>
+                </h1>
+                <div class="search-and-filters">
+                    <div class="search-box">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="search-input" placeholder="Search by name, title, or skill..." aria-label="Search freelancers">
+                    </div>
+                    <button id="mobile-filter-toggle" class="btn btn-secondary">
+                        <span class="lang-en">Filters</span>
+                        <span class="lang-ar">الفلاتر</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container freelancers-page-layout">
+            <aside id="filters-sidebar" class="filters-sidebar">
+                <button class="close-btn" aria-label="Close filters">×</button>
+                <div class="filter-group">
+                    <h4><span class="lang-en">Category</span><span class="lang-ar">التصنيف</span></h4>
+                    <div class="filter-pills" data-filter="category">
+                        <button class="filter-pill active" data-value="all"><span class="lang-en">All</span><span class="lang-ar">الكل</span></button>
+                        <button class="filter-pill" data-value="frontend"><span class="lang-en">Frontend</span><span class="lang-ar">واجهات</span></button>
+                        <button class="filter-pill" data-value="backend"><span class="lang-en">Backend</span><span class="lang-ar">خلفية</span></button>
+                        <button class="filter-pill" data-value="ui-ux"><span class="lang-en">UI/UX</span><span class="lang-ar">تصميم</span></button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                     <h4><span class="lang-en">Experience</span><span class="lang-ar">الخبرة</span></h4>
+                    <div class="filter-pills" data-filter="experience">
+                        <button class="filter-pill active" data-value="all"><span class="lang-en">All</span><span class="lang-ar">الكل</span></button>
+                        <button class="filter-pill" data-value="senior"><span class="lang-en">Senior</span><span class="lang-ar">خبير</span></button>
+                        <button class="filter-pill" data-value="mid"><span class="lang-en">Mid-level</span><span class="lang-ar">متوسط</span></button>
+                        <button class="filter-pill" data-value="junior"><span class="lang-en">Junior</span><span class="lang-ar">مبتدئ</span></button>
+                    </div>
+                </div>
+            </aside>
+            <div id="freelancers-grid">
+                <!-- Freelancer cards injected by JavaScript -->
+            </div>
+            
+        </div>
+    </main>
+<footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Section 1: About/Quick Links -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Quick Links</span><span class="lang-ar">روابط سريعة</span></h4>
+                    <ul>
+                         <li><a href="#"><span class="lang-en">About Us</span><span class="lang-ar">من نحن</span></a></li>
+                         <li><a href="#features"><span class="lang-en">Features</span><span class="lang-ar">المميزات</span></a></li>
+                         <li><a href="#"><span class="lang-en">Careers</span><span class="lang-ar">الوظائف</span></a></li>
+                         <li><a href="#"><span class="lang-en">Privacy Policy</span><span class="lang-ar">سياسة الخصوصية</span></a></li>
+                    </ul>
+                </div>
+                 <!-- Section 2: Contact -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Contact</span><span class="lang-ar">تواصل معنا</span></h4>
+                     <p>
+                        <span class="lang-en-block">Cairo, Egypt<br>contact@elevate.me</span>
+                        <span class="lang-ar-block">القاهرة، مصر<br>contact@elevate.me</span>
+                    </p>
+                </div>
+                <!-- Section 3: Social -->
+                <div class="footer-section">
+                     <h4><span class="lang-en">Follow Us</span><span class="lang-ar">تابعنا</span></h4>
+                     <div class="social-media-icons">
+                         <a href="#" aria-label="Facebook"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M22.675 0h-21.35C.59 0 0 .59 0 1.325v21.35C0 23.41.59 24 1.325 24H12.82v-9.29h-3.128V11.12H12.82V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.58H16.56V24h6.115c.735 0 1.325-.59 1.325-1.325V1.325C24 .59 23.41 0 22.675 0z"/></svg></a>
+                         <a href="#" aria-label="Twitter"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085c.645 1.956 2.52 3.375 4.743 3.415-1.708 1.322-3.844 2.112-6.162 2.112-.402 0-.799-.023-1.19-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.398 13.998-13.82 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                         <a href="#" aria-label="LinkedIn"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a>
+                     </div>
+                </div>
+            </div>
+
+            <div class="copyright-bar">
+                <p>
+                    <span class="lang-en">© 2025 Elevate. All Rights Reserved.</span>
+                    <span class="lang-ar">.© 2025 Elevate. جميع الحقوق محفوظة</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DATA SOURCE ---
+        const freelancersData = [
+            { id: 1, nameEN: "Eyad Ayman", nameAR: "إياد أيمن", titleEN: "Senior Frontend Developer", titleAR: "مطور واجهات أمامي خبير", bioEN: "Passionate about building accessible, fast, and elegant user interfaces with modern tech stacks.", bioAR: "شغوف ببناء واجهات مستخدم سريعة وأنيقة وسهلة الوصول بأحدث التقنيات.", category: 'frontend', experience: 'senior', availability: 'available', skills: ['HTML', 'CSS', 'JavaScript'], image: 'eyad.jpeg', rating: 5.0 },
+            { id: 2, nameEN: "Mazen Fady", nameAR: "مازن فادي", titleEN: "UI/UX Lead Designer", titleAR: "مصمم تجربة مستخدم رائد", bioEN: "Crafting delightful and intuitive digital experiences that solve real user problems and drive business goals.", bioAR: "أصمم تجارب استخدام ممتعة وبديهية تحل مشاكل المستخدمين وتحقق أهداف العمل.", category: 'ui-ux', experience: 'senior', availability: 'busy', skills: ['Figma', 'Sketch', 'User Research'], image: 'mazen.jpeg', rating: 5.0 },
+            { id: 3, nameEN: "Noha Muhammed", nameAR: "نهى محمد", titleEN: "Senior Backend Developer", titleAR: "مطورة واجهات خلفية محترفة", bioEN: "Specializing in Node.js and building scalable RESTful APIs. Eager to tackle new challenges.", bioAR: "متخصصة في Node.js وبناء واجهات برمجة تطبيقات REST قابلة للتوسع. متحمسة لمواجهة تحديات جديدة.", category: 'backend', experience: 'Senior', availability: 'available', skills: ['Node.js', 'Express', 'MongoDB'], image: 'noha.jpg', rating: 5.0 },
+            { id: 4, nameEN: "Mohamed Walid", nameAR: "محمد وليد", titleEN: "Senior Frontend Developer", titleAR: "مطور واجهات خبير", bioEN: "A detail-oriented developer focusing on creating responsive and performant web applications.", bioAR: "مطور يهتم بالتفاصيل ويركز على إنشاء تطبيقات ويب سريعة الاستجابة وعالية الأداء.", category: 'frontend', experience: 'Senior', availability: 'available', skills: ['React', 'Redux', 'Next.js'], image: 'mohamed.jpeg', rating: 5.0 },
+            { id: 5, nameEN: "Abdelrahman Mahmoud", nameAR: "عبدالرحمن محمود", titleEN: "Senior Backend Developer", titleAR: "مطور واجهات خلفية خبير", bioEN: "3+ years of experience with .NET, Django, and deploying robust services on AWS cloud.", bioAR: "خبرة أكثر من 3 سنوات في دوت نت, دجانغو، ونشر الخدمات القوية على سحابة أمازون.", category: 'backend', experience: 'senior', availability: 'busy', skills: ['.NET', 'Django', 'PostgreSQL', 'AWS'], image: 'abdelrahman.jpeg', rating: 5.0 },
+        ];
+        
+        // --- DOM ELEMENTS ---
+        const grid = document.getElementById('freelancers-grid');
+        const searchInput = document.getElementById('search-input');
+        const filterSidebar = document.getElementById('filters-sidebar');
+        const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+        const closeFilterBtn = document.querySelector('.filters-sidebar .close-btn');
+        const filterOverlay = document.querySelector('.filter-overlay');
+        const langToggleButton = document.getElementById('langToggle');
+
+        // --- STATE & CONFIG ---
+        const FAVORITES_KEY = 'ELEVATE_PRO_FAVORITES';
+        let favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+        
+        // --- HELPERS ---
+        const debounce = (func, delay) => {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        };
+        
+        // --- CORE FUNCTIONS ---
+
+        const renderAllCards = () => {
+            const fragment = document.createDocumentFragment();
+            freelancersData.forEach(f => {
+                const card = document.createElement('div');
+                card.className = 'freelancer-card';
+                card.dataset.id = f.id;
+                const isFav = favorites.includes(f.id);
+                const skillsHtml = f.skills.map(s => `<span class="skill-badge">${s}</span>`).join('');
+                
+                card.innerHTML = `
+                    <div class="card-top">
+                        <img src="${f.image || 'Home.png'}" alt="Avatar of ${f.nameEN}" class="card-avatar">
+                        <div class="card-info">
+                            <h3><span class="lang-en">${f.nameEN}</span><span class="lang-ar">${f.nameAR}</span></h3>
+                            <p class="title"><span class="lang-en">${f.titleEN}</span><span class="lang-ar">${f.titleAR}</span></p>
+                            <div class="rating">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27l-5.18 2.73 1-5.73-4.17-4.04 5.76-.84L12 4.61l2.59 5.78 5.76.84-4.17 4.04 1 5.73z"/></svg>
+                                <span>${f.rating.toFixed(1)}</span>
+                            </div>
+                        </div>
+                        <button class="favorite-btn ${isFav ? 'is-favorite' : ''}" aria-label="Toggle Favorite">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                        </button>
+                    </div>
+                    <div class="card-middle">
+                        <p class="bio"><span class="lang-en-block">${f.bioEN}</span><span class="lang-ar-block">${f.bioAR}</span></p>
+                        <div class="skills-container">${skillsHtml}</div>
+                    </div>
+                    <div class="card-bottom">
+                         <div class="status-indicator ${f.availability}">
+                            <span class="lang-en">${f.availability === 'available' ? 'Available now' : 'Busy'}</span>
+                            <span class="lang-ar">${f.availability === 'available' ? 'متاح الآن' : 'مشغول'}</span>
+                        </div>
+                         <a href="#" class="btn btn-cta"><span class="lang-en">Hire Now</span><span class="lang-ar">وظّف الآن</span></a>
+                    </div>
+                `;
+                fragment.appendChild(card);
+            });
+            grid.appendChild(fragment);
+        };
+        
+        const applyFilters = () => {
+            const activeFilterPills = document.querySelectorAll('.filter-pill.active');
+            const searchTerm = searchInput.value.toLowerCase();
+            let visibleCount = 0;
+
+            const activeFilters = {};
+            activeFilterPills.forEach(pill => {
+                const filterType = pill.parentElement.dataset.filter;
+                activeFilters[filterType] = pill.dataset.value;
+            });
+
+            document.querySelectorAll('.freelancer-card').forEach(card => {
+                const id = parseInt(card.dataset.id, 10);
+                const freelancer = freelancersData.find(f => f.id === id);
+                
+                const categoryMatch = activeFilters.category === 'all' || freelancer.category === activeFilters.category;
+                const experienceMatch = activeFilters.experience === 'all' || freelancer.experience === activeFilters.experience;
+
+                const searchMatch = !searchTerm ||
+                    freelancer.nameEN.toLowerCase().includes(searchTerm) ||
+                    freelancer.nameAR.toLowerCase().includes(searchTerm) ||
+                    freelancer.titleEN.toLowerCase().includes(searchTerm) ||
+                    freelancer.skills.some(s => s.toLowerCase().includes(searchTerm));
+
+                if (categoryMatch && experienceMatch && searchMatch) {
+                    card.classList.add('visible');
+                    visibleCount++;
+                } else {
+                    card.classList.remove('visible');
+                }
+            });
+            
+            // Handle no results message
+            let noResultsMsg = grid.querySelector('.no-results-message');
+            if(visibleCount === 0 && !noResultsMsg){
+                noResultsMsg = document.createElement('p');
+                noResultsMsg.className = 'no-results no-results-message';
+                noResultsMsg.innerHTML = `<span class="lang-en">No experts found.</span><span class="lang-ar">لم يتم العثور على خبراء.</span>`;
+                grid.appendChild(noResultsMsg);
+            } else if (visibleCount > 0 && noResultsMsg) {
+                noResultsMsg.remove();
+            }
+        };
+
+        const toggleFavorite = (card) => {
+            const id = parseInt(card.dataset.id, 10);
+            const favBtn = card.querySelector('.favorite-btn');
+            const index = favorites.indexOf(id);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                favBtn.classList.remove('is-favorite');
+            } else {
+                favorites.push(id);
+                favBtn.classList.add('is-favorite');
+            }
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        };
+        
+        // --- EVENT LISTENERS ---
+        searchInput.addEventListener('input', debounce(applyFilters, 300));
+
+        filterSidebar.addEventListener('click', e => {
+            if (e.target.classList.contains('filter-pill')) {
+                const pill = e.target;
+                const parentGroup = pill.parentElement;
+                parentGroup.querySelector('.active').classList.remove('active');
+                pill.classList.add('active');
+                applyFilters();
+            }
+        });
+
+        grid.addEventListener('click', e => {
+            const favBtn = e.target.closest('.favorite-btn');
+            if(favBtn){
+                toggleFavorite(favBtn.closest('.freelancer-card'));
+            }
+        });
+        
+       const updateLanguageVisibility = () => {
+    const isEnglish = document.documentElement.lang === 'en';
+    document.querySelectorAll('.lang-en, .lang-en-block').forEach(el => {
+        el.style.display = isEnglish ? '' : 'none';
+    });
+    document.querySelectorAll('.lang-ar, .lang-ar-block').forEach(el => {
+        el.style.display = isEnglish ? 'none' : '';
+    });
+};
+
+langToggleButton.addEventListener('click', () => {
+    const isEnglish = document.documentElement.lang === 'en';
+    document.body.classList.toggle('lang-mode-ar', isEnglish);
+    document.body.classList.toggle('lang-mode-en', !isEnglish);
+    document.documentElement.lang = isEnglish ? 'ar' : 'en';
+    document.documentElement.dir = isEnglish ? 'rtl' : 'ltr';
+
+    updateLanguageVisibility(); // ✅ نحدّث عرض اللغات
+});
+
+// ✅ استدعاء أول مرة لما الصفحة تفتح
+updateLanguageVisibility();
+
+        
+        // Mobile filter panel
+        mobileFilterToggle.addEventListener('click', () => {
+            filterSidebar.classList.add('is-open');
+            filterOverlay.classList.add('is-open');
+        });
+        
+        const closeFilters = () => {
+            filterSidebar.classList.remove('is-open');
+            filterOverlay.classList.remove('is-open');
+        }
+        closeFilterBtn.addEventListener('click', closeFilters);
+        filterOverlay.addEventListener('click', closeFilters);
+
+
+        // --- INITIALIZATION ---
+        renderAllCards(); // Render all cards into the DOM once
+        applyFilters();   // Then apply initial filters to show/hide them
+
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Path | Elevate</title>
+    <meta name="description" content="Your personalized learning journey on Elevate. Follow structured modules to become job-ready for your chosen career path.">
+    
+    <!-- All CSS is internal in this style block -->
+    <style>
+        /* =================================
+           1. GLOBAL DESIGN SYSTEM & RESET (SAME AS HOMEPAGE)
+        ==================================== */
+        :root {
+            --primary-bg: #11103C;
+            --accent-light-rose: #C6A5AD;
+            --accent-deep-violet: #524A75;
+            --accent-earthy-purple: #5B495A;
+            --accent-cool-gray-violet: #79779E;
+            --text-body: #848CA4;
+            --text-light: #F0F2F5;
+            --text-headings: #FFFFFF;
+            --white: #FFFFFF;
+            --section-bg-light: #F8F9FA;
+            --success-color: #28a745;
+            --inprogress-color: #ffc107;
+        }
+
+        body { font-family: 'maison-neue', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'maison-neue', sans-serif; font-weight: 700;}
+        html[dir="rtl"] body, html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: 'Tahoma', 'Helvetica', 'Arial', sans-serif; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { background-color: var(--section-bg-light); color: var(--text-body); line-height: 1.6; }
+        .container { width: 90%; max-width: 1140px; margin: 0 auto; }
+        section { padding: 40px 0; }
+        a:focus, button:focus { outline: 2px solid var(--accent-light-rose); outline-offset: 2px; }
+
+        /* =================================
+           2. LANGUAGE TOGGLE SYSTEM & HEADER/FOOTER (SAME AS HOMEPAGE)
+        ==================================== */
+        .lang-ar { display: none; }
+        body.lang-mode-ar .lang-en { display: none; } body.lang-mode-ar .lang-ar { display: inline; }
+        body.lang-mode-ar .lang-en-block { display: none; } body.lang-mode-ar .lang-ar-block { display: block; }
+        
+        .main-header { position: sticky; top: 0; left: 0; width: 100%; padding: 1rem 0; background-color: rgba(17, 16, 60, 0.95); backdrop-filter: blur(10px); z-index: 1000; }
+        .header-nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-placeholder { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); text-decoration: none; }
+        .main-nav ul { display: flex; list-style: none; } .main-nav li { margin: 0 15px; }
+        .main-nav a { color: var(--text-light); text-decoration: none; font-size: 1rem; padding: 5px 0; border-bottom: 2px solid transparent; transition: color 0.3s, border-color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: var(--white); border-bottom-color: var(--accent-light-rose); }
+        .lang-toggle-btn { background-color: var(--accent-deep-violet); color: var(--text-light); border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; }
+        html[dir="rtl"] .header-nav-container, html[dir="rtl"] .footer-content { flex-direction: row-reverse; }
+
+         /* =================================
+           9. FOOTER
+        ==================================== */
+        .main-footer {
+             background-color: var(--primary-bg);
+             color: var(--text-light);
+             padding: 60px 0 20px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--accent-deep-violet);
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section ul {
+             list-style: none;
+        }
+
+        .footer-section li a {
+            color: var(--text-body);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section li a:hover {
+            color: var(--accent-light-rose);
+        }
+        
+        .social-media-icons a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        
+        .social-media-icons .icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-body);
+            transition: color 0.3s;
+        }
+        
+        .social-media-icons a:hover .icon {
+            color: var(--accent-light-rose);
+        }
+        
+        html[dir="ltr"] .social-media-icons a:first-child { margin-left: 0; }
+        html[dir="rtl"] .social-media-icons a:first-child { margin-right: 0; }
+
+
+        .copyright-bar {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--accent-deep-violet);
+            font-size: 0.9rem;
+            color: var(--text-body);
+        }
+        
+        .btn { background-color: var(--accent-deep-violet); color: white; padding: 0.8rem 2rem; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.3s, background-color 0.3s; }
+        .btn:hover { transform: translateY(-2px); background-color: var(--primary-bg); }
+        .btn-cta { background-color: var(--accent-light-rose); color: var(--primary-bg); }
+
+        /* =================================
+           3. LEARNING PAGE SPECIFIC STYLES
+        ==================================== */
+        .page-title-section {
+            background-color: var(--primary-bg);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+            padding-top: 40px;
+        }
+
+        .page-title {
+            color: var(--text-headings);
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--text-body);
+        }
+
+        .career-summary-card {
+            background-color: var(--white);
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: -40px; /* Pulls it up over the section below */
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .summary-item { text-align: center; }
+        .summary-item strong {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-body);
+            text-transform: uppercase;
+        }
+        .summary-item span {
+            font-size: 1.5rem;
+            color: var(--primary-bg);
+            font-weight: 700;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-bar-fill {
+            width: 0%; /* JS will control this */
+            height: 100%;
+            background-color: var(--success-color);
+            transition: width 0.5s ease-in-out;
+        }
+
+        .learning-path-container { margin-top: 40px; }
+
+        .module-card {
+            background: var(--white);
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: box-shadow 0.3s;
+        }
+        .module-card.completed {
+            border-left: 5px solid var(--success-color);
+        }
+        .module-card.completed .module-status {
+             background-color: var(--success-color);
+             color: white;
+        }
+        html[dir="rtl"] .module-card.completed {
+             border-left: none;
+             border-right: 5px solid var(--success-color);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            gap: 1rem;
+        }
+        .module-icon { color: var(--accent-deep-violet); }
+        .module-title-info { flex-grow: 1; }
+        .module-title-info h3 { color: var(--primary-bg); font-size: 1.4rem; margin: 0;}
+        .module-title-info p { color: var(--text-body); font-size: 0.9rem; margin: 0;}
+
+        .module-status {
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            background-color: #eee;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .module-toggle-icon { transition: transform 0.3s ease; }
+        .module-card.expanded .module-toggle-icon { transform: rotate(180deg); }
+        
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            padding: 0 1.5rem;
+        }
+        .module-card.expanded .module-content {
+             max-height: 600px; /* Or a sufficiently large value */
+             padding: 1rem 1.5rem;
+             border-top: 1px solid #eee;
+        }
+        .module-content .objectives { list-style-position: inside; padding-left: 20px; }
+        html[dir="rtl"] .module-content .objectives { padding-left: 0; padding-right: 20px; }
+        .module-content p { margin-bottom: 1rem; }
+        .mark-as-complete-btn { margin-top: 1rem; background-color: var(--success-color) !important; }
+        .mark-as-complete-btn:disabled { background-color: #aaa !important; cursor: not-allowed; }
+
+        .motivation-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .motivation-card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .final-cta-section {
+            background: linear-gradient(135deg, var(--accent-earthy-purple), var(--accent-cool-gray-violet));
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 12px;
+            color: white;
+        }
+        .final-cta-section h2 { color: white; }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .motivation-section { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .page-title { font-size: 2.2rem; }
+            .career-summary-card { flex-direction: column; }
+            .main-nav { display: none; }
+        }
+
+    </style>
+</head>
+
+<body class="lang-mode-en">
+
+    <!-- HEADER: Same as other pages, "Learn" is active -->
+    <header class="main-header">
+        <div class="header-nav-container container">
+            <a href="index.html" class="logo-placeholder">Elevate</a>
+            <nav class="main-nav">
+                <ul>
+                    <ul>
+                    <li><a href="./index.html" ><span class="lang-en">Home</span><span class="lang-ar">الرئيسية</span></a></li>
+                    <li><a href="./discover.html"><span class="lang-en">Discover</span><span class="lang-ar">اكتشف</span></a></li>
+                    <li><a href="./Learning.html" class="active"><span class="lang-en">Learn</span><span class="lang-ar">تعلم</span></a></li>
+                    <li><a href="./Freelancers.html"><span class="lang-en">Freelancers</span><span class="lang-ar">المستقلون</span></a></li>
+                    <li><a href="./Hire.html"><span class="lang-en">Hire</span><span class="lang-ar">وظّف</span></a></li>
+                    <li><a href="./Contact.html"><span class="lang-en">Contact</span><span class="lang-ar">اتصل بنا</span></a></li>
+                </ul>
+                </ul>
+                </ul>
+            </nav>
+            <button id="langToggle" class="lang-toggle-btn" aria-label="Toggle Language">EN | AR</button>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="page-title-section">
+            <div class="container">
+                <h1 class="page-title">
+                    <span class="lang-en">Your Personalized Learning Journey</span>
+                    <span class="lang-ar">رحلتك التعليمية المصممة خصيصًا لك</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en-block">We analyzed your profile. Here’s the step-by-step path to becoming job-ready.</span>
+                    <span class="lang-ar-block">لقد حللنا ملفك الشخصي. إليك المسار التدريجي لتكون جاهزاً للعمل.</span>
+                </p>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Career Summary Card -->
+            <div class="career-summary-card">
+                <div class="summary-item">
+                    <strong><span class="lang-en">Career Track</span><span class="lang-ar">المسار الوظيفي</span></strong>
+                    <span><span class="lang-en">Frontend Dev</span><span class="lang-ar">مطور واجهات</span></span>
+                </div>
+                <div class="summary-item">
+                    <strong><span class="lang-en">Current Level</span><span class="lang-ar">المستوى الحالي</span></strong>
+                    <span><span class="lang-en">Beginner</span><span class="lang-ar">مبتدئ</span></span>
+                </div>
+                <div class="summary-item">
+                    <strong><span class="lang-en">Estimated Time</span><span class="lang-ar">الوقت التقديري</span></strong>
+                    <span><span class="lang-en">3 Months</span><span class="lang-ar">3 أشهر</span></span>
+                </div>
+                <div class="summary-item" style="flex-basis: 100%;">
+                    <strong><span class="lang-en">Your Progress</span><span class="lang-ar">تقدمك</span></strong>
+                    <div class="progress-bar-container">
+                        <div id="main-progress-bar" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Path Section -->
+            <div class="learning-path-container">
+                <!-- Module 1: HTML & CSS -->
+                <div class="module-card" data-module-id="html-css">
+                    <div class="module-header" role="button" aria-expanded="false" aria-controls="module-content-1">
+                        <div class="module-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20l4-16m4 4l4 4-4 4M6 8l-4 4 4 4"/></svg></div>
+                        <div class="module-title-info">
+                            <h3><span class="lang-en">HTML & CSS Basics</span><span class="lang-ar">أساسيات HTML و CSS</span></h3>
+                            <p><span class="lang-en">Duration: 2 Weeks</span><span class="lang-ar">المدة: أسبوعان</span></p>
+                        </div>
+                        <span class="module-status status-not-started"><span class="lang-en">Not Started</span><span class="lang-ar">لم تبدأ</span></span>
+                        <div class="module-toggle-icon">▼</div>
+                    </div>
+                    <div class="module-content" id="module-content-1">
+                        <p><span class="lang-en-block">Learn the fundamental building blocks of the web. Structure with HTML, and style with CSS.</span><span class="lang-ar-block">تعلم اللبنات الأساسية للويب. قم ببناء الهيكل باستخدام HTML والتصميم باستخدام CSS.</span></p>
+                        <button class="btn mark-as-complete-btn"><span class="lang-en">Mark as Complete</span><span class="lang-ar">إتمام الوحدة</span></button>
+                    </div>
+                </div>
+
+                <!-- Module 2: JavaScript -->
+                <div class="module-card" data-module-id="javascript">
+                     <div class="module-header" role="button" aria-expanded="false" aria-controls="module-content-2">
+                        <div class="module-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+                        <div class="module-title-info">
+                            <h3><span class="lang-en">Core JavaScript</span><span class="lang-ar">أساسيات JavaScript</span></h3>
+                            <p><span class="lang-en">Duration: 4 Weeks</span><span class="lang-ar">المدة: 4 أسابيع</span></p>
+                        </div>
+                        <span class="module-status status-not-started"><span class="lang-en">Not Started</span><span class="lang-ar">لم تبدأ</span></span>
+                        <div class="module-toggle-icon">▼</div>
+                    </div>
+                    <div class="module-content" id="module-content-2">
+                         <p><span class="lang-en-block">Bring your websites to life. Master variables, functions, DOM manipulation, and asynchronous JS.</span><span class="lang-ar-block">أضف الحياة إلى مواقعك. أتقن المتغيرات، الدوال، التلاعب بالـ DOM، وجافاسكريبت غير المتزامن.</span></p>
+                        <button class="btn mark-as-complete-btn"><span class="lang-en">Mark as Complete</span><span class="lang-ar">إتمام الوحدة</span></button>
+                    </div>
+                </div>
+                
+                 <!-- Module 3: Frameworks -->
+                <div class="module-card" data-module-id="framework">
+                     <div class="module-header" role="button" aria-expanded="false" aria-controls="module-content-3">
+                        <div class="module-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
+                        <div class="module-title-info">
+                            <h3><span class="lang-en">React Framework</span><span class="lang-ar">إطار عمل React</span></h3>
+                            <p><span class="lang-en">Duration: 6 Weeks</span><span class="lang-ar">المدة: 6 أسابيع</span></p>
+                        </div>
+                        <span class="module-status status-not-started"><span class="lang-en">Not Started</span><span class="lang-ar">لم تبدأ</span></span>
+                        <div class="module-toggle-icon">▼</div>
+                    </div>
+                    <div class="module-content" id="module-content-3">
+                        <p><span class="lang-en-block">Build complex, fast, and scalable user interfaces with the industry's leading framework.</span><span class="lang-ar-block">ابنِ واجهات مستخدم معقدة وسريعة وقابلة للتطوير باستخدام إطار العمل الرائد في المجال.</span></p>
+                        <button class="btn mark-as-complete-btn"><span class="lang-en">Mark as Complete</span><span class="lang-ar">إتمام الوحدة</span></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="motivation-section">
+                <div class="motivation-card">
+                    <h3><span class="lang-en">Your Progress</span><span class="lang-ar">تقدمك العام</span></h3>
+                    <p id="progress-tracker-text"><span class="lang-en">Modules Completed: 0 / 3</span><span class="lang-ar">الوحدات المكتملة: 0 / 3</span></p>
+                </div>
+                <div class="motivation-card" style="background:var(--accent-earthy-purple); color:white;">
+                    <h3 style="color:white;"><span class="lang-en">Weekly Challenge</span><span class="lang-ar">تحدي الأسبوع</span></h3>
+                    <p><span class="lang-en">Build a simple portfolio page using the skills you've learned so far!</span><span class="lang-ar">قم ببناء صفحة معرض أعمال بسيطة باستخدام المهارات التي تعلمتها حتى الآن!</span></p>
+                </div>
+            </section>
+
+            <!-- Final CTA -->
+           
+        </div>
+    </main>
+
+   <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Section 1: About/Quick Links -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Quick Links</span><span class="lang-ar">روابط سريعة</span></h4>
+                    <ul>
+                         <li><a href="#"><span class="lang-en">About Us</span><span class="lang-ar">من نحن</span></a></li>
+                         <li><a href="#features"><span class="lang-en">Features</span><span class="lang-ar">المميزات</span></a></li>
+                         <li><a href="#"><span class="lang-en">Careers</span><span class="lang-ar">الوظائف</span></a></li>
+                         <li><a href="#"><span class="lang-en">Privacy Policy</span><span class="lang-ar">سياسة الخصوصية</span></a></li>
+                    </ul>
+                </div>
+                 <!-- Section 2: Contact -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Contact</span><span class="lang-ar">تواصل معنا</span></h4>
+                     <p>
+                        <span class="lang-en-block">Cairo, Egypt<br>contact@elevate.me</span>
+                        <span class="lang-ar-block">القاهرة، مصر<br>contact@elevate.me</span>
+                    </p>
+                </div>
+                <!-- Section 3: Social -->
+                <div class="footer-section">
+                     <h4><span class="lang-en">Follow Us</span><span class="lang-ar">تابعنا</span></h4>
+                     <div class="social-media-icons">
+                         <a href="#" aria-label="Facebook"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M22.675 0h-21.35C.59 0 0 .59 0 1.325v21.35C0 23.41.59 24 1.325 24H12.82v-9.29h-3.128V11.12H12.82V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.58H16.56V24h6.115c.735 0 1.325-.59 1.325-1.325V1.325C24 .59 23.41 0 22.675 0z"/></svg></a>
+                         <a href="#" aria-label="Twitter"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085c.645 1.956 2.52 3.375 4.743 3.415-1.708 1.322-3.844 2.112-6.162 2.112-.402 0-.799-.023-1.19-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.398 13.998-13.82 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                         <a href="#" aria-label="LinkedIn"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a>
+                     </div>
+                </div>
+            </div>
+
+            <div class="copyright-bar">
+                <p>
+                    <span class="lang-en">© 2025 Elevate. All Rights Reserved.</span>
+                    <span class="lang-ar">.© 2025 Elevate. جميع الحقوق محفوظة</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Language Toggle Functionality (Same as other pages) ---
+        const langToggleButton = document.getElementById('langToggle');
+        const htmlEl = document.documentElement;
+        const bodyEl = document.body;
+        langToggleButton.addEventListener('click', () => {
+            const isEnglish = htmlEl.lang === 'en';
+            bodyEl.classList.toggle('lang-mode-ar', isEnglish);
+            bodyEl.classList.toggle('lang-mode-en', !isEnglish);
+            htmlEl.lang = isEnglish ? 'ar' : 'en';
+            htmlEl.dir = isEnglish ? 'rtl' : 'ltr';
+        });
+
+        // --- Learning Module Interactivity ---
+        const moduleCards = document.querySelectorAll('.module-card');
+        const mainProgressBar = document.getElementById('main-progress-bar');
+        const progressTrackerText = document.getElementById('progress-tracker-text');
+        const totalModules = moduleCards.length;
+
+        const STORAGE_KEY = 'ELEVATE_PROGRESS_KEY';
+        let progress = {};
+
+        // Accordion Functionality
+        moduleCards.forEach(card => {
+            const header = card.querySelector('.module-header');
+            header.addEventListener('click', () => {
+                card.classList.toggle('expanded');
+                const isExpanded = card.classList.contains('expanded');
+                header.setAttribute('aria-expanded', isExpanded);
+            });
+        });
+
+        // --- Progress Persistence with localStorage ---
+
+        /**
+         * Updates the UI for a single module based on its completion status.
+         */
+        function updateModuleUI(card, isCompleted) {
+            const statusEl = card.querySelector('.module-status');
+            const button = card.querySelector('.mark-as-complete-btn');
+            
+            card.classList.toggle('completed', isCompleted);
+            
+            if (isCompleted) {
+                statusEl.innerHTML = `<span class="lang-en">Completed</span><span class="lang-ar">مكتمل</span>`;
+                button.disabled = true;
+                button.innerHTML = `<span class="lang-en">Done!</span><span class="lang-ar">تم!</span>`;
+            }
+        }
+        
+        /**
+         * Updates the main progress bar and text tracker.
+         */
+        function updateGlobalProgress() {
+            const completedCount = Object.values(progress).filter(Boolean).length;
+            const percentage = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
+            
+            mainProgressBar.style.width = `${percentage}%`;
+            progressTrackerText.innerHTML = `<span class="lang-en">Modules Completed: ${completedCount} / ${totalModules}</span><span class="lang-ar">الوحدات المكتملة: ${completedCount} / ${totalModules}</span>`;
+        }
+        
+        /**
+         * Loads progress from localStorage and updates the entire UI.
+         */
+        function loadProgress() {
+            const savedProgress = localStorage.getItem(STORAGE_KEY);
+            progress = savedProgress ? JSON.parse(savedProgress) : {};
+            
+            moduleCards.forEach(card => {
+                const moduleId = card.dataset.moduleId;
+                if (progress[moduleId]) {
+                    updateModuleUI(card, true);
+                }
+            });
+
+            updateGlobalProgress();
+        }
+
+        /**
+         * Saves the current progress object to localStorage.
+         */
+        function saveProgress() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        // Add event listeners to "Mark as Complete" buttons
+        document.querySelectorAll('.mark-as-complete-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const card = e.target.closest('.module-card');
+                const moduleId = card.dataset.moduleId;
+                
+                // Update state
+                progress[moduleId] = true;
+                
+                // Update UI and save
+                saveProgress();
+                updateModuleUI(card, true);
+                updateGlobalProgress();
+            });
+        });
+
+        // Initial load of progress when the page starts
+        loadProgress();
+
+    });
+    </script>
+</body>
+</html>

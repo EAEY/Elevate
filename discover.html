@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Discovery | Elevate</title>
+    <meta name="description" content="Discover your strengths, skills, and interests with the Elevate Skill Discovery tool and get a personalized career path recommendation.">
+    
+    <!-- All CSS is internal in this style block -->
+    <style>
+        /* =================================
+           1. GLOBAL DESIGN SYSTEM & RESET (SAME AS HOMEPAGE)
+        ==================================== */
+        :root {
+            --primary-bg: #11103C;
+            --accent-light-rose: #C6A5AD;
+            --accent-deep-violet: #524A75;
+            --accent-earthy-purple: #5B495A;
+            --accent-cool-gray-violet: #79779E;
+            --text-body: #848CA4;
+            --text-light: #F0F2F5;
+            --text-headings: #FFFFFF;
+            --white: #FFFFFF;
+            --section-bg-light: #F8F9FA;
+        }
+
+        body { font-family: 'maison-neue', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'maison-neue', sans-serif; }
+        html[dir="rtl"] body, html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: 'Tahoma', 'Helvetica', 'Arial', sans-serif; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { background-color: var(--white); color: var(--text-body); line-height: 1.6; }
+        .container { width: 90%; max-width: 1140px; margin: 0 auto; }
+        section { padding: 60px 0; }
+        a:focus, button:focus, input:focus { outline: 2px solid var(--accent-light-rose); outline-offset: 2px; }
+
+        /* =================================
+           2. LANGUAGE TOGGLE SYSTEM (SAME AS HOMEPAGE)
+        ==================================== */
+        .lang-ar { display: none; }
+        body.lang-mode-ar .lang-en { display: none; }
+        body.lang-mode-ar .lang-ar { display: inline-block; }
+        body.lang-mode-ar .lang-en-block { display: none; }
+        body.lang-mode-ar .lang-ar-block { display: block; }
+        
+        html[dir="rtl"] .header-nav-container, html[dir="rtl"] .footer-content { flex-direction: row-reverse; }
+
+        /* =================================
+           3. HEADER & FOOTER (SAME AS HOMEPAGE)
+        ==================================== */
+        .main-header { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 0; background-color: #11103C; backdrop-filter: blur(10px); z-index: 1000; }
+        .header-nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-placeholder { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); text-decoration: none; }
+        .main-nav ul { display: flex; list-style: none; }
+        .main-nav li { margin: 0 15px; }
+        html[dir="rtl"] .main-nav li { margin: 0 15px; }
+        .main-nav a { color: var(--text-light); text-decoration: none; font-size: 1rem; padding: 5px 0; border-bottom: 2px solid transparent; transition: color 0.3s, border-color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: var(--white); border-bottom-color: var(--accent-light-rose); }
+        .lang-toggle-btn { background-color: var(--accent-deep-violet); color: var(--text-light); border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: bold; transition: background-color 0.3s; }
+        .lang-toggle-btn:hover { background-color: var(--accent-earthy-purple); }
+        body.lang-mode-ar .lang-toggle-btn .en-label, body.lang-mode-en .lang-toggle-btn .ar-label { opacity: 0.5; }
+        .mobile-menu-toggle { display: none; }
+        
+         /* =================================
+           9. FOOTER
+        ==================================== */
+        .main-footer {
+             background-color: var(--primary-bg);
+             color: var(--text-light);
+             padding: 60px 0 20px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--accent-deep-violet);
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section ul {
+             list-style: none;
+        }
+
+        .footer-section li a {
+            color: var(--text-body);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section li a:hover {
+            color: var(--accent-light-rose);
+        }
+        
+        .social-media-icons a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        
+        .social-media-icons .icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-body);
+            transition: color 0.3s;
+        }
+        
+        .social-media-icons a:hover .icon {
+            color: var(--accent-light-rose);
+        }
+        
+        html[dir="ltr"] .social-media-icons a:first-child { margin-left: 0; }
+        html[dir="rtl"] .social-media-icons a:first-child { margin-right: 0; }
+
+
+        .copyright-bar {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--accent-deep-violet);
+            font-size: 0.9rem;
+            color: var(--text-body);
+        }
+        
+        /* =================================
+           4. DISCOVERY PAGE SPECIFIC STYLES
+        ==================================== */
+        .page-title-section {
+            background-color: var(--section-bg-light);
+            text-align: center;
+            padding-top: 140px; /* More padding to clear fixed header */
+            padding-bottom: 60px;
+        }
+
+        .page-title {
+            color: var(--primary-bg);
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--text-body);
+        }
+
+        .discovery-tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .discovery-step {
+            display: none; /* Controlled by JS */
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .discovery-step.active {
+            display: block;
+        }
+        
+        .discovery-step fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .discovery-step legend {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-deep-violet);
+            margin-bottom: 2rem;
+            padding: 0;
+            width: 100%;
+        }
+        
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .options-grid label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            flex: 1 1 200px; /* Responsive items */
+        }
+        html[dir="rtl"] .options-grid label {
+            flex-direction: row-reverse;
+        }
+        
+        .options-grid label:hover {
+            border-color: var(--accent-light-rose);
+        }
+
+        .options-grid input[type="radio"]:checked + span,
+        .options-grid input[type="checkbox"]:checked + span {
+            color: var(--primary-bg);
+            font-weight: bold;
+        }
+        .options-grid input[type="radio"], 
+        .options-grid input[type="checkbox"] {
+            margin: 0;
+            appearance: none;
+        }
+
+        .options-grid label:has(input:checked) {
+            background-color: #f7f0f2;
+            border-color: var(--accent-light-rose);
+        }
+        
+        .step-icon { width: 24px; height: 24px; color: var(--accent-earthy-purple); }
+
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+        }
+
+        .btn {
+            background-color: var(--accent-deep-violet);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            background-color: var(--primary-bg);
+        }
+        
+        .btn.btn-secondary {
+             background-color: #eee;
+             color: #333;
+        }
+         .btn.btn-secondary:hover {
+             background-color: #ddd;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-light-rose);
+            color: var(--primary-bg);
+        }
+
+        /* RESULT CARD STYLES */
+        .result-card {
+            display: none; /* Initially hidden */
+            background-color: var(--accent-deep-violet);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s;
+        }
+        .result-card h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        .result-card p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        .result-item { margin-bottom: 1.5rem; }
+        .result-item strong {
+            display: block;
+            color: var(--accent-light-rose);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        .demand-list { display: flex; justify-content: center; gap: 2rem; list-style: none; margin-top: 1rem; flex-wrap: wrap; }
+        
+        /* RESPONSIVE STYLES */
+        @media (max-width: 992px) {
+             .main-nav { display: none; } .mobile-menu-toggle { display: block; }
+        }
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+            .page-title { font-size: 2.2rem; }
+            section { padding: 40px 0; }
+            .discovery-tool-container, .result-card { padding: 1.5rem; }
+        }
+
+    </style>
+</head>
+
+<body class="lang-mode-en">
+
+    <!-- HEADER: Same as homepage, but "Discover" is active -->
+    <header class="main-header">
+        <div class="header-nav-container container">
+            <a href="index.html" class="logo-placeholder" aria-label="Elevate Home">Elevate</a>
+            <nav class="main-nav">
+                <ul>
+                    <ul>
+                    <li><a href="./index.html"><span class="lang-en">Home</span><span class="lang-ar">الرئيسية</span></a></li>
+                    <li><a href="./discover.html" class="active"><span class="lang-en">Discover</span><span class="lang-ar">اكتشف</span></a></li>
+                    <li><a href="./Learning.html"><span class="lang-en">Learn</span><span class="lang-ar">تعلم</span></a></li>
+                    <li><a href="./Freelancers.html"><span class="lang-en">Freelancers</span><span class="lang-ar">المستقلون</span></a></li>
+                    <li><a href="./Hire.html"><span class="lang-en">Hire</span><span class="lang-ar">وظّف</span></a></li>
+                    <li><a href="./Contact.html"><span class="lang-en">Contact</span><span class="lang-ar">اتصل بنا</span></a></li>
+                </ul>
+                </ul>
+            </nav>
+            <button id="langToggle" class="lang-toggle-btn" aria-label="Toggle Language">
+                <span class="en-label">EN</span> | <span class="ar-label">AR</span>
+            </button>
+            <button class="mobile-menu-toggle" aria-label="Open Navigation Menu">...</button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- PAGE TITLE SECTION -->
+        <section class="page-title-section">
+            <div class="container">
+                <h1 class="page-title">
+                    <span class="lang-en-block">Discover Your Strengths and Career Path</span>
+                    <span class="lang-ar-block">اكتشف نقاط قوتك ومسارك المهني</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en-block">Answer a few simple questions, and our AI will analyze your profile to suggest the best career path for you.</span>
+                    <span class="lang-ar-block">أجب على بعض الأسئلة البسيطة، وسيقوم نظامنا الذكي بتحليل ملفك لاقتراح أفضل مسار مهني لك.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- SKILL DISCOVERY TOOL SECTION -->
+        <section id="discovery-tool">
+            <div class="container">
+
+                <!-- The interactive form container -->
+                <div class="discovery-tool-container">
+
+                    <!-- Step 1: Interests -->
+                    <div id="step-1" class="discovery-step active" data-step="1">
+                        <fieldset>
+                            <legend><span class="lang-en">What are your interests?</span><span class="lang-ar">ما هي اهتماماتك؟</span></legend>
+                            <div class="options-grid">
+                                <label><input type="checkbox" name="interest"><span><span class="lang-en">Creative Arts & Design</span><span class="lang-ar">الفنون الإبداعية والتصميم</span></span></label>
+                                <label><input type="checkbox" name="interest"><span><span class="lang-en">Technology & Coding</span><span class="lang-ar">التكنولوجيا والبرمجة</span></span></label>
+                                <label><input type="checkbox" name="interest"><span><span class="lang-en">Business & Marketing</span><span class="lang-ar">الأعمال والتسويق</span></span></label>
+                                <label><input type="checkbox" name="interest"><span><span class="lang-en">Writing & Content</span><span class="lang-ar">الكتابة والمحتوى</span></span></label>
+                            </div>
+                        </fieldset>
+                        <div class="step-navigation">
+                            <span></span> <!-- Empty span for spacing -->
+                            <button class="btn" id="next-1"><span class="lang-en">Next</span><span class="lang-ar">التالي</span> →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Skills -->
+                    <div id="step-2" class="discovery-step" data-step="2">
+                        <fieldset>
+                            <legend><span class="lang-en">Which skills are you confident in?</span><span class="lang-ar">ما المهارات التي تثق بها؟</span></legend>
+                             <div class="options-grid">
+                                <label><input type="checkbox" name="skill"><span><span class="lang-en">Problem Solving</span><span class="lang-ar">حل المشكلات</span></span></label>
+                                <label><input type="checkbox" name="skill"><span><span class="lang-en">Communication</span><span class="lang-ar">التواصل</span></span></label>
+                                <label><input type="checkbox" name="skill"><span><span class="lang-en">Teamwork</span><span class="lang-ar">العمل الجماعي</span></span></label>
+                                <label><input type="checkbox" name="skill"><span><span class="lang-en">Leadership</span><span class="lang-ar">القيادة</span></span></label>
+                            </div>
+                        </fieldset>
+                         <div class="step-navigation">
+                            <button class="btn btn-secondary" id="back-2">← <span class="lang-en">Back</span><span class="lang-ar">السابق</span></button>
+                            <button class="btn" id="next-2"><span class="lang-en">Next</span><span class="lang-ar">التالي</span> →</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Work Style -->
+                    <div id="step-3" class="discovery-step" data-step="3">
+                        <fieldset>
+                             <legend><span class="lang-en">What is your preferred working style?</span><span class="lang-ar">ما هو أسلوب عملك المفضل؟</span></legend>
+                             <div class="options-grid">
+                                <label><input type="radio" name="workstyle"><span><span class="lang-en">Fully Remote</span><span class="lang-ar">عن بعد بالكامل</span></span></label>
+                                <label><input type="radio" name="workstyle"><span><span class="lang-en">Hybrid (Office/Remote)</span><span class="lang-ar">هجين (مكتبي/عن بعد)</span></span></label>
+                                <label><input type="radio" name="workstyle"><span><span class="lang-en">In an Office</span><span class="lang-ar">في المكتب</span></span></label>
+                             </div>
+                        </fieldset>
+                        <div class="step-navigation">
+                            <button class="btn btn-secondary" id="back-3">← <span class="lang-en">Back</span><span class="lang-ar">السابق</span></button>
+                            <button class="btn btn-submit" id="submit-form"><span class="lang-en">See My Results</span><span class="lang-ar">أرني نتائجي</span></button>
+                        </div>
+                    </div>
+                </div> <!-- End of discovery-tool-container -->
+                
+                <!-- Result Card: Initially hidden, shown by JS -->
+                <div id="result-card" class="result-card">
+                    <h2>
+                        <span class="lang-en">Your AI-Powered Suggestion</span>
+                        <span class="lang-ar">اقتراحنا المعزز بالذكاء الاصطناعي</span>
+                    </h2>
+                    <p>
+                        <span class="lang-en-block">Based on your profile, we recommend a path in <strong>Frontend Development</strong>. This field aligns with your interests in technology and creative design.</span>
+                        <span class="lang-ar-block">بناءً على ملفك، نقترح عليك مسارًا في <strong>تطوير الواجهات الأمامية</strong>. هذا المجال يتوافق مع اهتماماتك بالتكنولوجيا والتصميم الإبداعي.</span>
+                    </p>
+                    
+                    <div class="result-item">
+                        <strong><span class="lang-en">Recommended Job Title</span><span class="lang-ar">المسمى الوظيفي الموصى به</span></strong>
+                        <span>Frontend Developer</span>
+                    </div>
+
+                    <div class="result-item">
+                        <strong><span class="lang-en">Top Countries in Demand</span><span class="lang-ar">أكثر الدول طلباً</span></strong>
+                        <ul class="demand-list">
+                            <li><span class="lang-en">Germany 🇩🇪 (92%)</span><span class="lang-ar">ألمانيا 🇩🇪 (٩٢٪)</span></li>
+                            <li><span class="lang-en">Saudi Arabia 🇸🇦 (85%)</span><span class="lang-ar">السعودية 🇸🇦 (٨٥٪)</span></li>
+                            <li><span class="lang-en">Canada 🇨🇦 (81%)</span><span class="lang-ar">كندا 🇨🇦 (٨١٪)</span></li>
+                        </ul>
+                    </div>
+                    
+                    <a href="Learning.html" class="btn btn-submit" style="margin-top: 1.5rem;">
+                        <span class="lang-en">Start Learning Now</span>
+                        <span class="lang-ar">ابدأ التعلم الآن</span>
+                    </a>
+                </div> <!-- End of result-card -->
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER: Same as homepage -->
+   <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Section 1: About/Quick Links -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Quick Links</span><span class="lang-ar">روابط سريعة</span></h4>
+                    <ul>
+                         <li><a href="#"><span class="lang-en">About Us</span><span class="lang-ar">من نحن</span></a></li>
+                         <li><a href="#features"><span class="lang-en">Features</span><span class="lang-ar">المميزات</span></a></li>
+                         <li><a href="#"><span class="lang-en">Careers</span><span class="lang-ar">الوظائف</span></a></li>
+                         <li><a href="#"><span class="lang-en">Privacy Policy</span><span class="lang-ar">سياسة الخصوصية</span></a></li>
+                    </ul>
+                </div>
+                 <!-- Section 2: Contact -->
+                <div class="footer-section">
+                    <h4><span class="lang-en">Contact</span><span class="lang-ar">تواصل معنا</span></h4>
+                     <p>
+                        <span class="lang-en-block">Cairo, Egypt<br>contact@elevate.me</span>
+                        <span class="lang-ar-block">القاهرة، مصر<br>contact@elevate.me</span>
+                    </p>
+                </div>
+                <!-- Section 3: Social -->
+                <div class="footer-section">
+                     <h4><span class="lang-en">Follow Us</span><span class="lang-ar">تابعنا</span></h4>
+                     <div class="social-media-icons">
+                         <a href="#" aria-label="Facebook"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M22.675 0h-21.35C.59 0 0 .59 0 1.325v21.35C0 23.41.59 24 1.325 24H12.82v-9.29h-3.128V11.12H12.82V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.58H16.56V24h6.115c.735 0 1.325-.59 1.325-1.325V1.325C24 .59 23.41 0 22.675 0z"/></svg></a>
+                         <a href="#" aria-label="Twitter"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.223.085c.645 1.956 2.52 3.375 4.743 3.415-1.708 1.322-3.844 2.112-6.162 2.112-.402 0-.799-.023-1.19-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.398 13.998-13.82 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                         <a href="#" aria-label="LinkedIn"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a>
+                     </div>
+                </div>
+            </div>
+
+            <div class="copyright-bar">
+                <p>
+                    <span class="lang-en">© 2025 Elevate. All Rights Reserved.</span>
+                    <span class="lang-ar">.© 2025 Elevate. جميع الحقوق محفوظة</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- JAVASCRIPT SECTION -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- Language Toggle Functionality (Identical to homepage) ---
+        const langToggleButton = document.getElementById('langToggle');
+        const htmlEl = document.documentElement;
+        const bodyEl = document.body;
+
+        function toggleLanguage() {
+            if (htmlEl.lang === 'en') {
+                bodyEl.classList.remove('lang-mode-en');
+                bodyEl.classList.add('lang-mode-ar');
+                htmlEl.lang = 'ar';
+                htmlEl.dir = 'rtl';
+            } else {
+                bodyEl.classList.remove('lang-mode-ar');
+                bodyEl.classList.add('lang-mode-en');
+                htmlEl.lang = 'en';
+                htmlEl.dir = 'ltr';
+            }
+        }
+        langToggleButton.addEventListener('click', toggleLanguage);
+
+        // --- Multi-Step Form Logic ---
+        const formContainer = document.querySelector('.discovery-tool-container');
+        const resultCard = document.getElementById('result-card');
+        const steps = document.querySelectorAll('.discovery-step');
+        let currentStep = 1;
+
+        /**
+         * Hides all steps and shows the specified step number.
+         * @param {number} stepNum The step number to display.
+         */
+        function showStep(stepNum) {
+            steps.forEach(step => {
+                step.classList.remove('active');
+            });
+            const activeStep = document.getElementById(`step-${stepNum}`);
+            if (activeStep) {
+                activeStep.classList.add('active');
+            }
+        }
+
+        // --- Event Listeners for Navigation Buttons ---
+        
+        // Next buttons
+        document.getElementById('next-1').addEventListener('click', () => {
+            currentStep = 2;
+            showStep(currentStep);
+        });
+        document.getElementById('next-2').addEventListener('click', () => {
+            currentStep = 3;
+            showStep(currentStep);
+        });
+
+        // Back buttons
+        document.getElementById('back-2').addEventListener('click', () => {
+            currentStep = 1;
+            showStep(currentStep);
+        });
+        document.getElementById('back-3').addEventListener('click', () => {
+            currentStep = 2;
+            showStep(currentStep);
+        });
+        
+        // Submit button
+        document.getElementById('submit-form').addEventListener('click', () => {
+            // In a real app, you would collect form data here
+            // For this mock, we just hide the form and show the result
+            formContainer.style.opacity = '0';
+            setTimeout(() => {
+                formContainer.style.display = 'none';
+                resultCard.style.display = 'block';
+            }, 500); // Wait for the fade-out transition to complete
+        });
+
+        // Initialize the first step
+        showStep(currentStep);
+        
+    });
+    </script>
+    
+</body>
+</html>
